@@ -8,6 +8,7 @@ const TopMenu = () => {
           {/* Don't use <a href elements for the links */}
             {/* <li><a href="/">Home</a></li> */}
             <li><NavLink to="/">Home</NavLink></li>
+            <li><NavLink to="signup">Sign Up</NavLink></li>
             <li><NavLink to="login">Login</NavLink></li>
             <li><NavLink to="recipes">Recipes</NavLink></li>
             <li><NavLink to="new">Add Recipe</NavLink></li>

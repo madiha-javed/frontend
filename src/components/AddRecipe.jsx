@@ -10,12 +10,27 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 
 import Button from '@mui/material/Button';
+import { Select } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
+
 
 
 
 const min = 0;
 const max = 10;
 const AddRecipe = () => {
+  const [recipeCategory, setRecipeCategory] = useState('');
+  const [ratingValue, setRatingValue] = useState(2);
+
+  const handleChange = (event) => {
+   
+    setRecipeCategory(event.target.value);
+    console.log(recipeCategory);
+  };
+
+
   const [value, setValue] = useState(0);
   return (
     <section>
@@ -102,6 +117,8 @@ const AddRecipe = () => {
               endAdornment: <InputAdornment position="end">min</InputAdornment>,
             },
           }}
+
+          
           
           inputProps={{ min, max }}
        
@@ -132,8 +149,33 @@ const AddRecipe = () => {
         }}
       />
 
+<FormControl  sx={ { mx: 1, width: '25ch' } }  >
+  <InputLabel id="category">Category</InputLabel>
+  <Select 
+    labelId="category"
+    id="category"
+    value={recipeCategory}
+    label="Category"
+    onChange={handleChange}
+  >
+    
+    <MenuItem value={1}>Vegan</MenuItem>
+    <MenuItem value={2}>Vegetarian</MenuItem>
+    <MenuItem value={3}>Non-Vegetarian</MenuItem>
+  </Select>
+</FormControl>
 
 
+{/* ******** Rating */}
+<Typography component="legend">Controlled</Typography>
+      <Rating
+        name="simple-controlled"
+        value={ratingValue}
+        onChange={(event, newValue) => {
+          setRatingValue(newValue);
+        }}
+      />
+{/* ******** Rating */}
 <TextField fullWidth
           id="cookingSteps"
           label="Steps"
@@ -154,7 +196,6 @@ const AddRecipe = () => {
          id="source" label="Recipe Source" />
 
         <Button variant="outlined">Add Recipe</Button>
-
 
       </Box>
 

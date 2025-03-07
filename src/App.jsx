@@ -8,6 +8,7 @@ import Recipes from './components/Recipes'
 import WeeklyPlanner from './components/WeeklyPlanner'
 import ShoppingList from './components/ShoppingList'
 import Footer from './core/footer/Footer'
+import SignUp from './components/SignUp'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={ <Home /> } />
+          <Route path='signup' element={ <SignUp /> } />
           <Route path='login' element={ <Login /> } />
           <Route path='recipes' element={ <Recipes /> } />
           <Route path="new" element={ <AddRecipe /> } />
