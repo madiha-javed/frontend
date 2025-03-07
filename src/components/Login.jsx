@@ -45,7 +45,7 @@ const Login = () => {
       <Box
         component="form"
         // '& > :not(style)': means that it applies to all children elements that have no 'style' attribute. so marging 1 x 8px would be applied to all children
-        sx={{ '& > :not(style)': { m: 1 } }}
+        sx={{ '& > :not(style)': { my: 1 } }}
         
         
         autoComplete="off"
@@ -56,6 +56,7 @@ const Login = () => {
           required
           id="email"
           label="Email"
+          type='email'
         // defaultValue="Hello World"
         />
 
