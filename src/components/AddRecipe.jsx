@@ -1,210 +1,366 @@
-import React,{useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-
 import Button from '@mui/material/Button';
 import { Select } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
+import Chip from '@mui/material/Chip';
+import Autocomplete from '@mui/material/Autocomplete';
+import InputLabel from '@mui/material/InputLabel';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
+import FormHelperText from '@mui/material/FormHelperText';
 
-
-
+const url="http://localhost:3000/users";
 
 const min = 0;
 const max = 10;
 const AddRecipe = () => {
-  const [recipeCategory, setRecipeCategory] = useState('');
-  const [ratingValue, setRatingValue] = useState(2);
+  // Basic state initialization
+  const [recipe, setRecipe] = useState({
+    title: '',
+    description: '',
+    portionSize: '',
+    preprationTime: '',
+    cookingTime: '',
+    category: '',
+    rating: 0,
+    cookingSteps: '',
+    notes: '',
+    source: ''
+  });
+  
+  // Separate state for ingredients to avoid complex nesting
+  const [recipeIngredients, setRecipeIngredients] = useState([
+    { name: '', quantity: '', unit: '' }
+  ]);
+  
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [ingredients, setIngredients] = useState([]);
 
-  const handleChange = (event) => {
-   
-    setRecipeCategory(event.target.value);
-    console.log(recipeCategory);
+  // Fetch available ingredients from backend
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/ingredients');
+        if (response.ok) {
+          const data = await response.json();
+          setIngredients(data || []);
+        }
+      } catch (err) {
+        console.error('Error fetching ingredients:', err);
+      }
+    };
+    
+    fetchIngredients();
+  }, []);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setRecipe(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleIngredientChange = (index, field, value) => {
+    const newIngredients = [...recipeIngredients];
+    newIngredients[index] = { ...newIngredients[index], [field]: value };
+    setRecipeIngredients(newIngredients);
+  };
 
-  const [value, setValue] = useState(0);
+  const addIngredient = () => {
+    setRecipeIngredients([...recipeIngredients, { name: '', quantity: '', unit: '' }]);
+  };
+
+  const removeIngredient = (index) => {
+    if (recipeIngredients.length > 1) {
+      setRecipeIngredients(recipeIngredients.filter((_, i) => i !== index));
+    }
+  };
+
+  const validateForm = () => {
+    if (!recipe.title) {
+      setError('Recipe title is required');
+      return false;
+    }
+    
+    if (!recipe.portionSize) {
+      setError('Portion size is required');
+      return false;
+    }
+    
+    if (!recipe.preprationTime) {
+      setError('Preparation time is required');
+      return false;
+    }
+    
+    if (!recipe.cookingTime) {
+      setError('Cooking time is required');
+      return false;
+    }
+    
+    if (!recipe.cookingSteps) {
+      setError('Cooking steps are required');
+      return false;
+    }
+    
+    // Check if at least one ingredient is valid
+    const validIngredients = recipeIngredients.filter(
+      ing => ing.name && ing.quantity && ing.unit
+    );
+    
+    if (validIngredients.length === 0) {
+      setError('At least one complete ingredient is required');
+      return false;
+    }
+    
+    return true;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError('');
+    setSuccess(false);
+
+    if (!validateForm()) return;
+
+    setLoading(true);
+    try {
+      // Filter out empty ingredients
+      const validIngredients = recipeIngredients.filter(
+        ing => ing.name && ing.quantity && ing.unit
+      );
+
+      const response = await fetch('http://localhost:3000/recipes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...recipe,
+          ingredients: validIngredients
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to add recipe');
+      }
+
+      setSuccess(true);
+      // Reset form
+      setRecipe({
+        title: '',
+        description: '',
+        portionSize: '',
+        preprationTime: '',
+        cookingTime: '',
+        category: '',
+        rating: 0,
+        cookingSteps: '',
+        notes: '',
+        source: ''
+      });
+      setRecipeIngredients([{ name: '', quantity: '', unit: '' }]);
+    } catch (err) {
+      setError(err.message || 'Error adding recipe');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section>
-      <h2>Add Recipe</h2>
-
-      <Box
-        component="form"
-        // '& > :not(style)': means that it applies to all children elements that have no 'style' attribute. so marging 1 x 8px would be applied to all children
-        sx={{ '& > :not(style)': { my: 1 } }}
-
-
-        autoComplete="off"
-      >
-
+      <Typography variant="h4" gutterBottom>Add Recipe</Typography>
+      
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      {success && <Alert severity="success" sx={{ mb: 2 }}>Recipe added successfully!</Alert>}
+      
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 2 }}>
         <TextField
-        sx={ { m: 1, width: '60ch' } }
           fullWidth
           required
-          id="titel"
-          label="Titel" />
-
-        <TextField 
-        sx={ { m: 1, width: '120ch' } }
-        fullWidth id="description" label="Description" />
-       
+          label="Recipe Title"
+          name="title"
+          value={recipe.title}
+          onChange={handleInputChange}
+          sx={{ mb: 2 }}
+        />
         
         <TextField
-          sx={ { m: 1, width: '25ch' } }
-           id="portionSize"
-          label="Portion Size"    
-          type="number"
-          slotProps={{
-            input: {
-              endAdornment: <InputAdornment position="end">min</InputAdornment>,
-            },
-          }}
-          
-          inputProps={{ min, max }}
-       
-        defaultValue={value}
-        //parseInt(string, radix)
-        onChange={(e) => {
-          var value = parseInt(e.target.value, 10);
-
-          if (value > max) value = max;
-          if (value < min) value = min;
-
-          setValue(value);
-        }}
-          
+          fullWidth
+          label="Description"
+          name="description"
+          value={recipe.description}
+          onChange={handleInputChange}
+          multiline
+          rows={2}
+          sx={{ mb: 2 }}
         />
+        
+        <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+          <TextField
+            required
+            label="Portion Size"
+            name="portionSize"
+            type="number"
+            value={recipe.portionSize}
+            onChange={handleInputChange}
+            inputProps={{ min: 1 }}
+          />
+          
+          <TextField
+            required
+            label="Preparation Time (min)"
+            name="preprationTime"
+            type="number"
+            value={recipe.preprationTime}
+            onChange={handleInputChange}
+            inputProps={{ min: 0 }}
+          />
+          
+          <TextField
+            required
+            label="Cooking Time (min)"
+            name="cookingTime"
+            type="number"
+            value={recipe.cookingTime}
+            onChange={handleInputChange}
+            inputProps={{ min: 0 }}
+          />
+        </Stack>
+        
+        <FormControl sx={{ mb: 2, minWidth: 200 }}>
+          <InputLabel>Category</InputLabel>
+          <Select
+            name="category"
+            value={recipe.category}
+            label="Category"
+            onChange={handleInputChange}
+          >
+            <MenuItem value=""><em>None</em></MenuItem>
+            <MenuItem value="vegan">Vegan</MenuItem>
+            <MenuItem value="vegetarian">Vegetarian</MenuItem>
+            <MenuItem value="non-vegetarian">Non-Vegetarian</MenuItem>
+          </Select>
+        </FormControl>
+        
+        <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>
+          Ingredients <Typography component="span" color="error">*</Typography>
+        </Typography>
+        <FormHelperText sx={{ mb: 2 }}>At least one complete ingredient is required</FormHelperText>
+        
+        {recipeIngredients.map((ing, index) => (
+          <Stack key={index} direction="row" spacing={2} sx={{ mb: 2 }}>
+            <Autocomplete
+              freeSolo
+              options={ingredients.map(i => i.name || '')}
+              value={ing.name || ''}
+              onChange={(_, newValue) => handleIngredientChange(index, 'name', newValue)}
+              renderInput={(params) => (
                 <TextField
-          sx={ { m: 1, width: '25ch' } }
-           id="preprationTime"
-          label="Prepration Time"    
-          type="number"
-          slotProps={{
-            input: {
-              endAdornment: <InputAdornment position="end">min</InputAdornment>,
-            },
-          }}
-          
-          inputProps={{ min, max }}
-       
-        defaultValue={value}
-        //parseInt(string, radix)
-        onChange={(e) => {
-          var value = parseInt(e.target.value, 10);
-
-          if (value > max) value = max;
-          if (value < min) value = min;
-
-          setValue(value);
-        }}
-          
-        />
+                  {...params}
+                  label="Ingredient Name"
+                  required
+                  placeholder="e.g. Flour, Sugar"
+                />
+              )}
+              sx={{ flexGrow: 1 }}
+            />
+            
+            <TextField
+              label="Quantity"
+              type="number"
+              required
+              value={ing.quantity}
+              onChange={(e) => handleIngredientChange(index, 'quantity', e.target.value)}
+              inputProps={{ min: 0, step: 0.1 }}
+              sx={{ width: 100 }}
+            />
+            
+            <TextField
+              label="Unit"
+              required
+              value={ing.unit}
+              onChange={(e) => handleIngredientChange(index, 'unit', e.target.value)}
+              sx={{ width: 100 }}
+              placeholder="e.g. cup, tbsp"
+            />
+            
+            <IconButton 
+              onClick={() => removeIngredient(index)}
+              disabled={recipeIngredients.length <= 1}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Stack>
+        ))}
+        
+        <Button variant="outlined" onClick={addIngredient} sx={{ mb: 3 }}>
+          Add Ingredient
+        </Button>
+        
         <TextField
-          sx={ { m: 1, width: '25ch' } }
-           id="cookingTime"
-          label="Cooking Time"    
-          type="number"
-          slotProps={{
-            input: {
-              endAdornment: <InputAdornment position="end">min</InputAdornment>,
-            },
-          }}
-
-          
-          
-          inputProps={{ min, max }}
-       
-        defaultValue={value}
-        //parseInt(string, radix)
-        onChange={(e) => {
-          var value = parseInt(e.target.value, 10);
-
-          if (value > max) value = max;
-          if (value < min) value = min;
-
-          setValue(value);
-        }}
-          
-        />
-
-<TextField
-        type="number"
-        inputProps={{ min, max }}
-        value={value}
-        onChange={(e) => {
-          var value = parseInt(e.target.value, 10);
-
-          if (value > max) value = max;
-          if (value < min) value = min;
-
-          setValue(value);
-        }}
-      />
-
-<FormControl  sx={ { mx: 1, width: '25ch' } }  >
-  <InputLabel id="category">Category</InputLabel>
-  <Select 
-    labelId="category"
-    id="category"
-    value={recipeCategory}
-    label="Category"
-    onChange={handleChange}
-  >
-    <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-    <MenuItem value={1}>Vegan</MenuItem>
-    <MenuItem value={2}>Vegetarian</MenuItem>
-    <MenuItem value={3}>Non-Vegetarian</MenuItem>
-  </Select>
-</FormControl>
-
-
-{/* ******** Rating */}
-<Typography component="legend">Controlled</Typography>
-      <Rating
-        name="simple-controlled"
-        value={ratingValue}
-        onChange={(event, newValue) => {
-          setRatingValue(newValue);
-        }}
-      />
-{/* ******** Rating */}
-<TextField fullWidth
-          id="cookingSteps"
-          label="Steps"
+          fullWidth
+          required
+          label="Cooking Steps"
+          name="cookingSteps"
+          value={recipe.cookingSteps}
+          onChange={handleInputChange}
           multiline
-          rows={8}
-         
+          rows={4}
+          sx={{ mb: 2 }}
+          placeholder="Enter step-by-step instructions"
         />
-
-<TextField 
-          id="notes"
+        
+        <TextField
+          fullWidth
           label="Notes"
+          name="notes"
+          value={recipe.notes}
+          onChange={handleInputChange}
           multiline
-          maxRows={2}
-         
+          rows={2}
+          sx={{ mb: 2 }}
         />
- <TextField 
-        sx={ { m: 1, width: '120ch' } }
-         id="source" label="Recipe Source" />
-
-        <Button variant="outlined">Add Recipe</Button>
-
+        
+        <TextField
+          fullWidth
+          label="Recipe Source"
+          name="source"
+          value={recipe.source}
+          onChange={handleInputChange}
+          sx={{ mb: 2 }}
+        />
+        
+        <Box sx={{ mb: 3 }}>
+          <Typography component="legend">Rating</Typography>
+          <Rating
+            name="rating"
+            value={Number(recipe.rating)}
+            onChange={(_, newValue) => {
+              setRecipe(prev => ({ ...prev, rating: newValue }));
+            }}
+          />
+        </Box>
+        
+        <Button 
+          type="submit" 
+          variant="contained" 
+          disabled={loading}
+        >
+          {loading ? 'Adding Recipe...' : 'Add Recipe'}
+        </Button>
       </Box>
-
-
-
     </section>
-  )
-}
+  );
+};
 
-export default AddRecipe
+export default AddRecipe;

@@ -58,16 +58,21 @@ const SignUp = () => {
   // const handleSubmit = (event) => {
   //   console.log("test2");
   // }
-  const handleDatepicker=(x) =>{
+  const handleDatepicker = (x) => {
     let d = new Date(x);
-    const formattedDate = d.toISOString().split('T')[0]; // Formats to yyyy-mm-dd
-    console.log("formatted date:", formattedDate);
+    const formattedDate = d.toISOString().split('T')[0];
     
-    setFormFields({
-        ...formFields,
-        dob: formattedDate 
-    });
-  }
+    setFormFields(prevFields => ({
+        ...prevFields,
+        dob: formattedDate
+    }));
+
+    // Validate date immediately
+    setErrors(prevErrors => ({
+        ...prevErrors,
+        dob: formattedDate ? '' : 'Date of birth is required'
+    }));
+  };
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -108,7 +113,7 @@ const SignUp = () => {
         ...prevErrors,
         [name]: error
     }));
-};
+  };
 
   const [errors, setErrors] = useState({
     firstName: '',
