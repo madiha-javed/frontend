@@ -263,7 +263,7 @@ const AddRecipe = () => {
               freeSolo
               options={ingredients.map(i => i.name || '')}
               value={ing.name || ''}
-              onChange={(_, newValue) => handleIngredientChange(index, 'name', newValue)}
+              onInputChange={(_, newValue) => handleIngredientChange(index, 'name', newValue)}
               renderInput={(params) => (
                 <TextField
                   {...params}
