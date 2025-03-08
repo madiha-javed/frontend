@@ -1,5 +1,6 @@
-
 import * as React from 'react';
+import { useState } from "react";
+
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 
@@ -21,14 +22,28 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import dayjs from 'dayjs';
 
 
 
 
 
-console.log("test");
+
+const url="http://localhost:3000/users";
 
 const SignUp = () => {
+  let date = Date();
+  const [value,setValue]=useState(dayjs(date));
+  console.log(value);
+  
+  const [ formFields, setFormFields ] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    dob: '',
+    password: '',
+});
+
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -40,60 +55,125 @@ const SignUp = () => {
   const handleMouseUpPassword = (event) => {
     event.preventDefault();
   };
-  const handleSubmit = (event) => {
-    console.log("test2");
+  // const handleSubmit = (event) => {
+  //   console.log("test2");
+  // }
+  const handleDatepicker=(x) =>{
+    let d = new Date(x);
+    const formattedDate = d.toISOString().split('T')[0]; // Formats to yyyy-mm-dd
+    console.log("formatted date:", formattedDate);
+    
+    setFormFields({
+        ...formFields,
+        dob: formattedDate 
+    });
   }
+  const handleChange = (event) => {
+    // destructuring
+    console.log(event);
+    console.log(event.target);
+    const { name, value } = event.target;
+    // const name = event.target.name;
+    // const value = event.target.value;
+
+      console.log(formFields);
+
+        setFormFields({
+            ...formFields,
+            [name]: value
+        });
+        console.log("after");
+        console.log(formFields);
+
+    
+}
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("handlesubmit funciton");
+    console.log(formFields);
+    // if (error===false)
+    // let isThereErrors=false;
+    // for (let property in errors) {
+    //     if (errors[property]!=="") {
+    //         isThereErrors=true;
+    //     }
+    // }
+    // // if (!error) {
+    // if (!isThereErrors) {
+    //     if (formFields.gender==="O" && formFields.otherGender==="") {
+    //         alert("You need to select or specify a gender!");
+    //     } else {
+    //         const dataToInsert={
+    //             first_name: formFields.firstName,
+    //             last_name: formFields.lastName,
+    //             email: formFields.email,
+    //             birth_date: formFields.dob,
+    //             password: formFields.password
+    //         }
+    //         onSubmitForm(dataToInsert);
+    //     }
+    // } else {
+    //     alert("There are still some errors.")
+    // }
+}
+ 
 
   return (
-    <section className="login">
+    <section className="signup">
 
-    <div className='LoginForm'>
+    <div className='SignUpForm'>
 
-      <h2>Login Page</h2>
-      <Box
-        component="form"
+      <h2>Sign Up Page</h2>
+      <Box 
+      
+         component="form"
         // '& > :not(style)': means that it applies to all children elements that have no 'style' attribute. so marging 1 x 8px would be applied to all children
         sx={{ '& > :not(style)': { my: 1 } }}
         
         
         autoComplete="off"
+        onSubmit={handleSubmit}
       >
 
 <TextField
           fullWidth
           required
           id="firstName"
+          name="firstName"
+          // value={formFields.firstName}
           label="First Name"
           type='text'
-        // defaultValue="Hello World"
+         onChange={handleChange}
         />
 
 <TextField
           fullWidth
           required
           id="lastName"
+          name="lastName"
           label="Last Name"
           type='text'
-        // defaultValue="Hello World"
+          onChange={handleChange}
         />
 
         <TextField
           fullWidth
           required
           id="email"
+          name="email"
           label="Email"
           type='email'
-        // defaultValue="Hello World"
+          onChange={handleChange}
         />
 
 
-{/* <DatePicker 
-id="dob"
-label="Basic date picker" /> */}
 
 <LocalizationProvider dateAdapter={AdapterDayjs}>
       
-        <DatePicker   id ="dob" label="Date of Birth" />
+        {/* <DatePicker   value={value} label="Date of Birth"  onChange={(newValue) => setValue(newValue)}/> */}
+        <DatePicker   value={value} label="Date of Birth"  onChange={(newValue) => handleDatepicker(newValue)}/>
+
   
     </LocalizationProvider>
 
@@ -102,7 +182,9 @@ label="Basic date picker" /> */}
           <InputLabel htmlFor="password">Password</InputLabel>
           <OutlinedInput
             id="password"
+            name="password"
             type={showPassword ? 'text' : 'password'}
+            onChange={handleChange}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -122,8 +204,8 @@ label="Basic date picker" /> */}
           />
         </FormControl>
 
-        <Button variant="outlined">Sign Up</Button>
-
+        <Button variant="outlined" type='submit'>Sign Up</Button>
+        
 
       </Box>
 

@@ -158,7 +158,9 @@ const AddRecipe = () => {
     label="Category"
     onChange={handleChange}
   >
-    
+    <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
     <MenuItem value={1}>Vegan</MenuItem>
     <MenuItem value={2}>Vegetarian</MenuItem>
     <MenuItem value={3}>Non-Vegetarian</MenuItem>
