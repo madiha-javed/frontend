@@ -7,7 +7,8 @@ const IconNav = () => {
   return (
     <section id="topNavIcons">
         <FontAwesomeIcon icon={faMagnifyingGlass} />
-        <FontAwesomeIcon icon={faUser} />
+        <FontAwesomeIcon icon={faUser} 
+        />
     </section>
   )
 }

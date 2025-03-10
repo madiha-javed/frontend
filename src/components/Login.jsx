@@ -1,5 +1,7 @@
 
-import {useState,useContext} from 'react'; 
+import { useState, useContext} from 'react'; 
+import AuthContext from '../core/AuthContext';
+import { useNavigate } from 'react-router'; 
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 
@@ -13,8 +15,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
 
-import AuthContext from '../core/AuthContext';
-import { useNavigate } from 'react-router';
+
 
 
 
@@ -27,9 +28,10 @@ const Login = () => {
     password: '',
   });
 
-  const [error, setError] = useState('');
+const [error, setError] = useState('');
 
- // const { login } = useContext(AuthContext);
+ const {login } = useContext(AuthContext);
+ const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -144,9 +146,14 @@ const Login = () => {
           password: '',
         });
         if (result.found===true) {
-        alert('Login successful!');
+          console.log(result.data);
+        console.log('Login successful!');
+        login({ userId: result.data.user_id, name: result.data.first_name + " " + result.data.last_name });
+        navigate('/');
+
+
       }else{
-        alert('Login not successful!');
+        console.log('Login not successful!');
         // show error - Wrong credentials
         setError("Wrong credentials");
       }
@@ -169,7 +176,7 @@ const Login = () => {
         sx={{ '& > :not(style)': { my: 1 } }}
         onSubmit={handleSubmit}
         noValidate
-        autoComplete="off"
+        // autoComplete="off"
       >
 
         <TextField

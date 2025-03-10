@@ -1,22 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Box, TextField, Button, Typography, Alert, Stack,
   IconButton, Autocomplete, FormHelperText, FormControl,
   InputLabel, Select, MenuItem, Rating
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AuthContext from '../core/AuthContext';
 
 const url="http://localhost:3000/users";
+
 
 const min = 0;
 const max = 10;
 const AddRecipe = () => {
+  const {user} = useContext(AuthContext);
+  //const current
+  //console.log(JSON.stringify(user.user.userId));
   const [recipe, setRecipe] = useState({
-    title: '', description: '', portionSize: '', preprationTime: '',
+    title: '', description: '', portionSize: '', preparationTime: '',
     cookingTime: '', category: '', rating: 0, cookingSteps: '',
-    notes: '', source: ''
+    notes: '', source: '', user : user.userId
   });
-
+  console.log(user.userId);
+  console.log(recipe);
   const [recipeIngredients, setRecipeIngredients] = useState([
     { name: '', quantity: '', unit: '' }
   ]);
@@ -67,7 +73,7 @@ const AddRecipe = () => {
   const validateForm = () => {
     if (!recipe.title) return setError('Recipe title is required');
     if (!recipe.portionSize) return setError('Portion size is required');
-    if (!recipe.preprationTime) return setError('Preparation time is required');
+    if (!recipe.preparationTime) return setError('Preparation time is required');
     if (!recipe.cookingTime) return setError('Cooking time is required');
     if (!recipe.cookingSteps) return setError('Cooking steps are required');
 
@@ -121,7 +127,7 @@ const AddRecipe = () => {
 
       setSuccess(true);
       setRecipe({
-        title: '', description: '', portionSize: '', preprationTime: '',
+        title: '', description: '', portionSize: '', preparationTime: '',
         cookingTime: '', category: '', rating: 0, cookingSteps: '',
         notes: '', source: ''
       });
@@ -160,8 +166,8 @@ const AddRecipe = () => {
           />
           
           <TextField
-            required label="Preparation Time (min)" name="preprationTime" type="number"
-            value={recipe.preprationTime} onChange={handleInputChange}
+            required label="Preparation Time (min)" name="preparationTime" type="number"
+            value={recipe.preparationTime} onChange={handleInputChange}
             inputProps={{ min: 0 }}
           />
           
