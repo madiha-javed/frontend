@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+import {useState,useContext} from 'react'; 
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 
@@ -13,15 +13,25 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
 
+import AuthContext from '../core/AuthContext';
+import { useNavigate } from 'react-router';
 
 
 
 
-
-
+const url="http://localhost:3000/login";
 
 const Login = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [formFields, setFormFields] = useState({
+    email: '',
+    password: '',
+  });
+
+  const [error, setError] = useState('');
+
+ // const { login } = useContext(AuthContext);
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -32,9 +42,120 @@ const Login = () => {
   const handleMouseUpPassword = (event) => {
     event.preventDefault();
   };
-  const handleSubmit = (event) => {
-    console.log("test2");
-  }
+
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    // Update form fields
+    setFormFields(prevFields => ({
+        ...prevFields,
+        [name]: value
+    }));
+
+    // Validate field immediately
+    // let error = '';
+    // switch (name) {
+
+    //     case 'email':
+    //         if (!value) error = 'Email is required';
+    //         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = 'Invalid email format';
+    //         break;
+
+    //     case 'password':
+    //         if (!value) error = 'Password is required';
+    //         break;
+    // }
+
+    // Update errors state
+    setErrors(prevErrors => ({
+        ...prevErrors,
+        [name]: error
+    }));
+  };
+
+  const [errors, setErrors] = useState({
+    email: '',
+    password: '',
+  });
+
+  const validateForm = () => {
+    let tempErrors = {    
+      email: '',
+      password: '',
+    };
+    let isValid = true;
+
+  
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formFields.email) {
+      tempErrors.email = 'Email is required';
+      isValid = false;
+    } else if (!emailRegex.test(formFields.email)) {
+      tempErrors.email = 'Invalid email format';
+      isValid = false;
+    }
+
+
+    // Password validation
+    if (!formFields.password) {
+      tempErrors.password = 'Password is required';
+      isValid = false;
+    } 
+
+    setErrors(tempErrors);
+    return isValid;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    
+    if (validateForm()) {
+      try {
+        const data = {
+          email: formFields.email,
+          password: formFields.password
+        };
+
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          //throw new Error('login failed');
+          if (response.status === 409) {
+            const result = await response.json();
+            throw Error(result.message);
+          } else {
+            throw Error("There was a problem connecting to the database!");
+          }
+          console.log(result);
+        }
+        const result = await response.json();
+
+        // Clear form after successful submission
+        setFormFields({ 
+          email: '',
+          password: '',
+        });
+        if (result.found===true) {
+        alert('Login successful!');
+      }else{
+        alert('Login not successful!');
+        // show error - Wrong credentials
+        setError("Wrong credentials");
+      }
+      
+      } catch (error) {
+        alert('Error during login: ' + error.message);
+      }
+    }
+  };
 
   return (
     <section className="login">
@@ -46,8 +167,8 @@ const Login = () => {
         component="form"
         // '& > :not(style)': means that it applies to all children elements that have no 'style' attribute. so marging 1 x 8px would be applied to all children
         sx={{ '& > :not(style)': { my: 1 } }}
-        
-        
+        onSubmit={handleSubmit}
+        noValidate
         autoComplete="off"
       >
 
@@ -55,18 +176,24 @@ const Login = () => {
           fullWidth
           required
           id="email"
+          name="email"
           label="Email"
           type='email'
+          onChange={handleChange}
+          value={formFields.email}
+          error={!!errors.email}
+          helperText={errors.email}
         // defaultValue="Hello World"
         />
 
 
 
-        <FormControl fullWidth  variant="outlined">
+        <FormControl fullWidth  variant="outlined" error={!!errors.password}>
 
           <InputLabel htmlFor="password">Password</InputLabel>
           <OutlinedInput
             id="password"
+            name="password"
             type={showPassword ? 'text' : 'password'}
             endAdornment={
               <InputAdornment position="end">
@@ -84,10 +211,14 @@ const Login = () => {
               </InputAdornment>
             }
             label="Password"
+            onChange={handleChange}
+            value={formFields.password}
+          
           />
+          {errors.password && <FormHelperText>{errors.password}</FormHelperText>}
         </FormControl>
 
-        <Button variant="outlined">Login</Button>
+        <Button variant="outlined" type='submit'>Login</Button>
 
 
       </Box>
