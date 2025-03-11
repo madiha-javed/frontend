@@ -10,38 +10,37 @@ import ShoppingList from './components/ShoppingList'
 import Footer from './core/footer/Footer'
 import SignUp from './components/SignUp'
 import Logout from './components/Logout'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import AuthContext from './core/AuthContext';
-import { useNavigate } from 'react-router';
 import Profile from './components/Profile'
 import ProtectedRoute from './components/ProtectedRoute'
+import ViewRecipe from './components/ViewRecipe'
 
 function App() {
   const { user } = useContext(AuthContext);
   return (
     <>
       <header>
-      <Header />
+        <Header />
       </header>
       <main>
         <Routes>
-          <Route path="/" element={ <Home /> } />
-          <Route path='signup' element={ <SignUp /> } />
-          <Route path='login' element={ <Login /> } />
+          <Route path="/" element={<Home />} />
+          <Route path='signup' element={<SignUp />} />
+          <Route path='login' element={<Login />} />
 
           {/* **** protected routes */}
           <Route path="profile" element={
-              <ProtectedRoute user={user} >
-                  <Profile /> 
-                  
-              </ProtectedRoute>
+            <ProtectedRoute user={user}>
+              <Profile />
+            </ProtectedRoute>
           } />
-          <Route path='recipes' element={ <Recipes /> } />
-          <Route path="recipe" element={ <AddRecipe /> } />
-          <Route path='planner' element={ <WeeklyPlanner /> } />
-          <Route path='list' element={ <ShoppingList /> } />
-          
-          <Route path='logout' element={ <Logout /> } />
+          <Route path='recipes' element={<Recipes />} />
+          <Route path="recipe" element={<AddRecipe />} />
+          <Route path="recipe/view" element={<ViewRecipe />} />
+          <Route path='planner' element={<WeeklyPlanner />} />
+          <Route path='list' element={<ShoppingList />} />
+          <Route path='logout' element={<Logout />} />
         </Routes>
       </main>
       <footer>

@@ -12,6 +12,7 @@ import AuthContext from '../core/AuthContext';
 import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import { useNavigate } from 'react-router-dom';
+import { Button, Stack } from '@mui/material';
 
 const url = "http://localhost:3000/recipes/user/";
 const Recipes = () => {
@@ -28,7 +29,7 @@ const navigate = useNavigate();
     { field: 'recipe_id', headerName: 'ID', width: 70 },
     { field: 'title', headerName: 'Title', width: 130 },
     { field: 'description', headerName: 'Description', width: 230, sortable: false, },
-    { field: 'category', headerName: 'Last name', width: 130 },
+    { field: 'category', headerName: 'Category', width: 130 },
     {
       field: 'ratings',
       headerName: 'Ratings', 
@@ -36,19 +37,20 @@ const navigate = useNavigate();
       width: 90,
     },
     {
-      field: 'edit',
-      headerName: 'Edit',
-      width: 90,
+      field: 'action',
+      headerName: 'Action', 
+      width: 280,
+      headerAlign:"center",
       renderCell: (params) => (
-        <button onClick={() => handleEdit(params.row)}>Edit</button>
-      ),
-    },
-    {
-      field: 'delete',
-      headerName: 'Delete', 
-      width: 90,
-      renderCell: (params) => (
-        <button onClick={() => handleDelete(params.row)}>Delete</button>
+        <>
+        
+         <Stack spacing={2} direction="row">
+         <Button variant="contained" onClick={() => handleView(params.row)}>View</Button>
+        <Button variant="contained" onClick={() => handleEdit(params.row)}>Edit</Button>
+        <Button variant="contained" onClick={() => handleDelete(params.row)}>Delete</Button>
+        </Stack>
+        </>
+        
       ),
     }
   ];
@@ -88,6 +90,14 @@ const navigate = useNavigate();
     console.log('render');
 }, []);
 
+  const handleView = (recipe) => {
+    navigate('/recipe/view', { 
+      state: { 
+        recipe_id: recipe.recipe_id, 
+        recipe_user: recipe.user_id 
+      } 
+    });
+  }
   const handleDelete = async (recipe) => {
     if (window.confirm('Are you sure you want to delete this recipe?')) {
       try {
