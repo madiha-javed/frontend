@@ -88,6 +88,26 @@ const navigate = useNavigate();
     console.log('render');
 }, []);
 
+  const handleDelete = async (recipe) => {
+    if (window.confirm('Are you sure you want to delete this recipe?')) {
+      try {
+        const response = await fetch(`http://localhost:3000/recipes/${recipe.recipe_id}`, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete recipe');
+        }
+
+        // Remove the deleted recipe from the rows state
+        setRows(prevRows => prevRows.filter(row => row.recipe_id !== recipe.recipe_id));
+      } catch (error) {
+        console.error('Error deleting recipe:', error);
+        alert('Failed to delete recipe: ' + error.message);
+      }
+    }
+  };
+
   return (
     
     <section>
