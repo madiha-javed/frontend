@@ -21,7 +21,7 @@ const TopMenu = () => {
             { isLogged && 
               <>
                 <li><NavLink to="recipes">Recipes</NavLink></li>
-                <li><NavLink to="new">Add Recipe</NavLink></li>
+                <li><NavLink to="recipe">Add Recipe</NavLink></li>
           
                 <li><NavLink to="planner">Weekly Planner</NavLink></li>
                 <li><NavLink to="list">Shoping List</NavLink></li>

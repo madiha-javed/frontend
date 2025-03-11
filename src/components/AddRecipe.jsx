@@ -14,6 +14,7 @@ import { useLocation } from 'react-router';
 const min = 0;
 const max = 10;
 const AddRecipe = () => {
+  const [action, setAction]= useState('Add');
   const {user} = useContext(AuthContext);
   //const current
   //console.log(JSON.stringify(user.user.userId));
@@ -52,13 +53,15 @@ const AddRecipe = () => {
   useEffect(() => {
    
   
-    console.log("******");
-    console.log(location.state);
+    
 
 
     if (location.state && location.state.edit && location.state.recipe_id) {
       
+      setAction('Edit');
       console.log("inside if");
+      console.log("******");
+    console.log(location.state);
       console.log(location.state.recipe_id);
       fetchIngredientsForRecipe();
     }
@@ -186,7 +189,7 @@ const AddRecipe = () => {
 
   return (
     <section>
-      <Typography variant="h4" gutterBottom>Add Recipe</Typography>
+      <Typography variant="h4" gutterBottom>{action} Recipe</Typography>
       
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       {success && <Alert severity="success" sx={{ mb: 2 }}>Recipe added successfully!</Alert>}

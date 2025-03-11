@@ -56,7 +56,7 @@ const navigate = useNavigate();
   function handleEdit(recipe) {
     console.log(recipe);
     console.log("*** Handle ***");
-    navigate('/new', { state: { edit: true, recipe_id: recipe.recipe_id } });
+    navigate('/recipe', { state: { edit: true, recipe_id: recipe.recipe_id, recipe_user:1 } });
   }
   const fetchRecipes = async () => {
     try {
