@@ -51,26 +51,45 @@ const AddRecipe = () => {
   const [ingredients, setIngredients] = useState([]);
   const location = useLocation();
   useEffect(() => {
-   
-  
-    
-
-
     if (location.state && location.state.edit && location.state.recipe_id) {
-      
       setAction('Edit');
-      console.log("inside if");
-      console.log("******");
-    console.log(location.state);
-      console.log(location.state.recipe_id);
-      fetchIngredientsForRecipe();
+      setRecipeEditId(location.state.recipe_id);
+      fetchRecipeData(location.state.recipe_id);
     }
-
-    console.log("ending new code ************");
-
-    
     fetchIngredients();
   }, []);
+
+  const fetchRecipeData = async (recipeId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/recipes/${recipeId}`);
+      if (!response.ok) throw new Error('Failed to fetch recipe');
+      const data = await response.json();
+      
+      setRecipe({
+        title: data.title || '',
+        description: data.description || '',
+        portionSize: data.portion_size || '',
+        preparationTime: data.prepration_time || '',
+        cookingTime: data.cooking_time || '',
+        category: data.category || '',
+        rating: data.ratings || 0,
+        cookingSteps: data.steps || '',
+        notes: data.notes || '',
+        source: data.source || '',
+        user: data.user_id || '1'
+      });
+
+      if (data.ingredients && data.ingredients.length > 0) {
+        setRecipeIngredients(data.ingredients.map(ing => ({
+          name: ing.name || '',
+          quantity: ing.quantity || '',
+          unit: ing.unit || ''
+        })));
+      }
+    } catch (err) {
+      setError('Error loading recipe: ' + err.message);
+    }
+  };
 
   const fetchIngredientsForRecipe = async () => {
     try {
@@ -163,25 +182,35 @@ const AddRecipe = () => {
         ing => ing.name && ing.quantity && ing.unit
       );
 
-      const response = await fetch('http://localhost:3000/recipes', {
-        method: 'POST',
+      const url = recipeEditId 
+        ? `http://localhost:3000/recipes/${recipeEditId}`
+        : 'http://localhost:3000/recipes';
+
+      const method = recipeEditId ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...recipe, ingredients: validIngredients })
       });
 
-      const data = await response.json();
-
-      if (!response.ok) throw new Error(data.message || 'Failed to add recipe');
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || 'Failed to save recipe');
+      }
 
       setSuccess(true);
-      setRecipe({
-        title: '', description: '', portionSize: '', preparationTime: '',
-        cookingTime: '', category: '', rating: 0, cookingSteps: '',
-        notes: '', source: ''
-      });
-      setRecipeIngredients([{ name: '', quantity: '', unit: '' }]);
+      if (!recipeEditId) {
+        // Clear form only for new recipes
+        setRecipe({
+          title: '', description: '', portionSize: '', preparationTime: '',
+          cookingTime: '', category: '', rating: 0, cookingSteps: '',
+          notes: '', source: '', user: '1'
+        });
+        setRecipeIngredients([{ name: '', quantity: '', unit: '' }]);
+      }
     } catch (err) {
-      setError(err.message || 'Error adding recipe');
+      setError(err.message || 'Error saving recipe');
     } finally {
       setLoading(false);
     }
@@ -318,9 +347,11 @@ const AddRecipe = () => {
         </Box>
         
         <Button 
-          type="submit" variant="contained" disabled={loading}
+          type="submit" 
+          variant="contained" 
+          disabled={loading}
         >
-          {loading ? 'Adding Recipe...' : 'Add Recipe'}
+          {loading ? 'Saving...' : `${action} Recipe`}
         </Button>
       </Box>
     </section>
