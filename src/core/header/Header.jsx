@@ -9,7 +9,7 @@ const Header = () => {
       
         <Logo />
         <TopMenu />
-        <IconNav />
+        {/* <IconNav /> */}
     </section>
   )
 }

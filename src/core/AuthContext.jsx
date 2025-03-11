@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
     const login = (userData) => {
         setIsLogged(true);
         setUser(userData);
+       
     }
 
     const logout = () => {

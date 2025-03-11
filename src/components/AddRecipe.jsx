@@ -6,8 +6,9 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AuthContext from '../core/AuthContext';
+import { useLocation } from 'react-router';
 
-const url="http://localhost:3000/users";
+//const url="http://localhost:3000/users";
 
 
 const min = 0;
@@ -16,12 +17,28 @@ const AddRecipe = () => {
   const {user} = useContext(AuthContext);
   //const current
   //console.log(JSON.stringify(user.user.userId));
+  const [recipeEditId, setRecipeEditId] = useState(null);
+
+  // useEffect(() => {
+  //   const { state } = window.history;
+  //   if (state && state.edit && state.recipe) {
+      
+  //     console.log(state);
+  //     console.log(state.recipe);
+  //     //setRecipeEditId(state.recipe.recipe_id);
+  //   }
+  // }, []);
   const [recipe, setRecipe] = useState({
     title: '', description: '', portionSize: '', preparationTime: '',
     cookingTime: '', category: '', rating: 0, cookingSteps: '',
-    notes: '', source: '', user : user.userId
+    notes: '', source: '', user : '1'
   });
-  console.log(user.userId);
+  // const [recipe, setRecipe] = useState({
+  //   title: '', description: '', portionSize: '', preparationTime: '',
+  //   cookingTime: '', category: '', rating: 0, cookingSteps: '',
+  //   notes: '', source: '', user : user.userId
+  // })
+  //console.log(user.userId);
   console.log(recipe);
   const [recipeIngredients, setRecipeIngredients] = useState([
     { name: '', quantity: '', unit: '' }
@@ -31,21 +48,49 @@ const AddRecipe = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [ingredients, setIngredients] = useState([]);
-
+  const location = useLocation();
   useEffect(() => {
-    const fetchIngredients = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/ingredients');
-        if (response.ok) {
-          const data = await response.json();
-          setIngredients(data || []);
-        }
-      } catch (err) {
-        console.error('Error fetching ingredients:', err);
-      }
-    };
+   
+  
+    console.log("******");
+    console.log(location.state);
+
+
+    if (location.state && location.state.edit && location.state.recipe_id) {
+      
+      console.log("inside if");
+      console.log(location.state.recipe_id);
+      fetchIngredientsForRecipe();
+    }
+
+    console.log("ending new code ************");
+
+    
     fetchIngredients();
   }, []);
+
+  const fetchIngredientsForRecipe = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/ingredients');
+      if (response.ok) {
+        const data = await response.json();
+        setIngredients(data || []);
+      }
+    } catch (err) {
+      console.error('Error fetching ingredients:', err);
+    }
+  };
+  const fetchIngredients = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/ingredients');
+      if (response.ok) {
+        const data = await response.json();
+        setIngredients(data || []);
+      }
+    } catch (err) {
+      console.error('Error fetching ingredients:', err);
+    }
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
