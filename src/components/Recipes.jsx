@@ -99,7 +99,9 @@ const navigate = useNavigate();
     });
   }
   const handleDelete = async (recipe) => {
-    if (window.confirm('Are you sure you want to delete this recipe?')) {
+    console.log("inside DEL function()");
+    console.log(recipe);
+    if (window.confirm(`'Are you sure you want to delete "${recipe.title} "recipe?`)) {
       try {
         const response = await fetch(`http://localhost:3000/recipes/${recipe.recipe_id}`, {
           method: 'DELETE'
@@ -160,7 +162,7 @@ const navigate = useNavigate();
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10]}
-        checkboxSelection
+        // checkboxSelection
         sx={{ border: 0 }}
       />
     </Paper>
