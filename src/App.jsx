@@ -5,7 +5,7 @@ import Login from './components/Login'
 import Header from './core/header/Header'
 import AddRecipe from './components/AddRecipe'
 import Recipes from './components/Recipes'
-import WeeklyPlanner from './components/WeeklyPlanner'
+import Planner from './components/Planner'
 import ShoppingList from './components/ShoppingList'
 import Footer from './core/footer/Footer'
 import SignUp from './components/SignUp'
@@ -38,7 +38,7 @@ function App() {
           <Route path='recipes' element={<Recipes />} />
           <Route path="recipe" element={<AddRecipe />} />
           <Route path="recipe/view" element={<ViewRecipe />} />
-          <Route path='planner' element={<WeeklyPlanner />} />
+          <Route path='planner' element={<Planner />} />
           <Route path='list' element={<ShoppingList />} />
           <Route path='logout' element={<Logout />} />
         </Routes>

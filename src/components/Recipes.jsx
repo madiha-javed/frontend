@@ -21,7 +21,7 @@ const Recipes = () => {
 
 const navigate = useNavigate();
 
-  const [students, setStudents] =  useState([]);
+  //const [students, setStudents] =  useState([]);
 
   const [ rows, setRows] = useState([]);
 
