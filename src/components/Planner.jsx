@@ -99,7 +99,23 @@ const Planner = () => {
 
   const columns = [
     //{ field: 'recipe_id', headerName: 'ID', width: 70 },
-    { field: 'date', headerName: 'Date', width: 130, sortable: true, },
+    { field: 'date', headerName: 'Date', width: 200, sortable: true, type : 'date', 
+      valueFormatter: (value) => {
+        if (value == null) {
+          return '';
+        }
+        //return `${value.toLocaleString()} %`;
+        //return `${value}`;
+        return new Date(value).toLocaleDateString();
+      },
+    //   valueFormatter: (params) => {
+    //     if (!params?.value) return '';
+    //     const date = new Date(params.value);
+    //     return "date";
+    //     // return date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+
+    // }
+  },
     { field: 'title', headerName: 'Title', width: 230 },
     { field: 'meal_time', headerName: 'Meal Time', width: 230, sortable: false, }
   ];
@@ -110,7 +126,7 @@ const Planner = () => {
     try {
       //console.log(user);
       //const response = await fetch(url+ user.userId);
-      const response = await fetch(url + '1');
+      const response = await fetch("http://localhost:3000/recipes/user/" + '1');
       if (!response.ok) {
         throw Error("There was a problem connecting to the database!");
       }
@@ -132,7 +148,7 @@ const Planner = () => {
     try {
       //console.log(user);
       //const response = await fetch(url+ user.userId);
-      const response = await fetch(url + '6');
+      const response = await fetch("http://localhost:3000/planner/user/" + '1');
       if (!response.ok) {
         throw Error("There was a problem connecting to the database!");
       }
@@ -281,7 +297,6 @@ const Planner = () => {
     event.preventDefault();
     console.log(formFields);
     
-    
     if (validateForm()) {
       console.log("all fields done");
       try {
@@ -309,6 +324,9 @@ const Planner = () => {
           date: '',
           mealTime: ''
         });
+        
+        // Refresh the DataGrid by fetching updated data
+        await fetchPlanner();
         
         alert('Insertion successful!');
       } catch (error) {
@@ -356,18 +374,16 @@ const Planner = () => {
             required
             id="recipe_id"
             value={formFields.recipe_id} 
-            name="recipe_id" label="Select Recipe"
+            name="recipe_id" 
+            label="Select Recipe"
             onChange={handleInputChange}
             error={!!errors.recipe_id}
-          
           >
-         
-            { recipes && recipes.map(row=>
-                  <MenuItem key={row.id} value={row.id}>{row.title}</MenuItem>
-
-                  
-                    )}
-
+            { recipes && recipes.map(row => (
+              <MenuItem key={row.recipe_id} value={row.recipe_id}>
+                {row.title}
+              </MenuItem>
+            ))}
           </Select>
           {errors.recipe_id && <FormHelperText>{errors.recipe_id}</FormHelperText>}
         </FormControl>
@@ -406,13 +422,11 @@ const Planner = () => {
       <div>
         <Paper sx={{ height: 400, width: '100%' }}>
           <DataGrid
-            //getRowId={(row: any) =>  row.first_name + row.salary}
             getRowId={(row) => row.id}
             rows={rows}
             columns={columns}
             initialState={{ pagination: { paginationModel } }}
             pageSizeOptions={[5, 10]}
-            // checkboxSelection
             sx={{ border: 0 }}
           />
         </Paper>
