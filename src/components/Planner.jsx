@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 
 
@@ -77,12 +77,23 @@ function ServerDay(props) {
 const url = "http://localhost:3000/planner/user/";
 const Planner = () => {
 
-  const [planner, setPlanner] = useState({
-    title: '', mealTime: '', date: '', preparationTime: '',
-    cookingTime: '', category: '', rating: 0, cookingSteps: '',
-    notes: '', source: '', user : '1'
-  });
+  let date = Date();
+  const [value, setValue] = useState(dayjs(date));
+  const initialDate = dayjs(date).toISOString().split('T')[0]; // Format today's date as yyyy-mm-dd
 
+
+  const [formFields, setFormFields] = useState({
+    //id: '',
+    recipe_id: '',
+    date: initialDate,
+    mealTime: '', // Set initial dob to today's date
+    // password: '',
+  });
+  const [errors, setErrors] = useState({
+    recipe_id: '',
+    date: '',
+    mealTime: ''
+  });
 
   const [rows, setRows] = useState([]);
 
@@ -138,75 +149,20 @@ const Planner = () => {
     }
   }
 
-  const requestAbortController = React.useRef(null);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
+  
+  
 
-  const fetchHighlightedDays = (date) => {
-    console.log(date);
-    const controller = new AbortController();
-    fakeFetch(date, {
-      signal: controller.signal,
-    })
-      .then(({ daysToHighlight }) => {
-        setHighlightedDays(daysToHighlight);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        // ignore the error if it's caused by `controller.abort`
-        if (error.name !== 'AbortError') {
-          throw error;
-        }
-      });
-
-    requestAbortController.current = controller;
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
     fetchRecipes();
     fetchPlanner();
     
-    fetchHighlightedDays(initialValue);
-    // abort request on unmount
-    return () => requestAbortController.current?.abort();
   }, []);
 
-  const handleMonthChange = (date) => {
-    if (requestAbortController.current) {
-      // make sure that you are aborting useless requests
-      // because it is possible to switch between months pretty quickly
-      requestAbortController.current.abort();
-    }
+ 
 
-    setIsLoading(true);
-    setHighlightedDays([]);
-    fetchHighlightedDays(date);
-  };
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    console.log(formFields);
-    console.log("handleSubmit- start");
-  }
 
-  let date = Date();
-  const [value, setValue] = useState(dayjs(date));
-  const initialDate = dayjs(date).toISOString().split('T')[0]; // Format today's date as yyyy-mm-dd
-
-  const [formFields, setFormFields] = useState({
-    //id: '',
-    recipeId: '',
-    title:'',
-    date: initialDate,
-    mealTime: '', // Set initial dob to today's date
-    // password: '',
-  });
-  const [errors, setErrors] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    dob: '',
-    password: '',
-  });
+ 
+  
 
 
   const handleChange = (event) => {
@@ -223,26 +179,12 @@ const Planner = () => {
     // Validate field immediately
     let error = '';
     switch (name) {
-      case 'firstName':
-        if (!value.trim()) error = 'First name is required';
-        else if (value.length < 2) error = 'First name must be at least 2 characters';
-        else if (!/^[A-Za-z\s]+$/.test(value)) error = 'First name should only contain letters';
+      case 'recipe_id':
+        if (!value.trim()) error = 'Recipe is required';
         break;
 
-      case 'lastName':
-        if (!value.trim()) error = 'Last name is required';
-        else if (value.length < 2) error = 'Last name must be at least 2 characters';
-        else if (!/^[A-Za-z\s]+$/.test(value)) error = 'Last name should only contain letters';
-        break;
-
-      case 'email':
-        if (!value) error = 'Email is required';
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = 'Invalid email format';
-        break;
-
-      case 'password':
-        if (!value) error = 'Password is required';
-        else if (value.length < 8) error = 'Password must be at least 8 characters';
+      case 'mealTime':
+        if (!value.trim()) error = 'Meal Time  is required';
         break;
     }
 
@@ -252,15 +194,7 @@ const Planner = () => {
       [name]: error
     }));
   };
-  let handleFruitChange = (e) => {
-    console.log(e.target.value);
-    //setFruit(e.target.value);
-    //
-    // setFormFields(prevFields => ({
-    //   ...prevFields,
-    //   [name]: value
-    // }));
-  };
+
   const handleInputChange = (event) => {
     console.log(event);
     const { name, value } = event.target;
@@ -268,33 +202,130 @@ const Planner = () => {
     console.log(formFields);
     setFormFields(prev => ({ ...prev, [name]: value }));
     console.log(formFields);
+    // Validate field immediately
+    // let error = '';
+    // switch (name) {
+    //     case 'firstName':
+    //         if (!value.trim()) error = 'First name is required';
+    //         else if (value.length < 2) error = 'First name must be at least 2 characters';
+    //         else if (!/^[A-Za-z\s]+$/.test(value)) error = 'First name should only contain letters';
+    //         break;
+
+    //     case 'lastName':
+    //         if (!value.trim()) error = 'Last name is required';
+    //         else if (value.length < 2) error = 'Last name must be at least 2 characters';
+    //         else if (!/^[A-Za-z\s]+$/.test(value)) error = 'Last name should only contain letters';
+    //         break;
+
+    //     case 'email':
+    //         if (!value) error = 'Email is required';
+    //         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = 'Invalid email format';
+    //         break;
+
+    //     case 'password':
+    //         if (!value) error = 'Password is required';
+    //         else if (value.length < 8) error = 'Password must be at least 8 characters';
+    //         break;
+    // }
+
+
   };
+  const handleDatepicker = (x) => {
+    let d = new Date(x);
+    const formattedDate = d.toISOString().split('T')[0];
+    
+    setFormFields(prevFields => ({
+        ...prevFields,
+        date: formattedDate
+    }));
+
+    // Validate date immediately
+    setErrors(prevErrors => ({
+        ...prevErrors,
+        date: formattedDate ? '' : 'Date is required'
+    }));
+  };
+  const validateForm = () => {
+    let tempErrors = {
+      recipe_id: '',
+      date: '',
+      mealTime: ''
+    };
+    let isValid = true;
+
+     
+
+    // Name validation regex - only letters and spaces allowed
+   // const nameRegex = /^[A-Za-z\s]+$/;
+
+    // First Name validation
+    if (formFields.recipe_id==='') {
+      tempErrors.recipe_id = 'Recipe name is required';
+      isValid = false;
+    } 
+
+    // Last Name validation
+    if (formFields.mealTime==='') {
+      tempErrors.mealTime = 'Meal name is required';
+      isValid = false;
+    } 
+
+   
+    
+
+    setErrors(tempErrors);
+    return isValid;
+  };
+  const handleSubmit = async (event) => {
+    console.log("handleSubmit- start");
+    event.preventDefault();
+    console.log(formFields);
+    
+    
+    if (validateForm()) {
+      console.log("all fields done");
+      try {
+        const dataToInsert = {
+          recipe_id: formFields.recipe_id,
+          date: formFields.date,
+          meal_time: formFields.mealTime
+        };
+
+        const response = await fetch("http://localhost:3000/planner", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataToInsert)
+        });
+
+        if (!response.ok) {
+          throw new Error('Insertion failed');
+        }
+
+        // Clear form after successful submission
+        setFormFields({
+          recipe_id: '',
+          date: '',
+          mealTime: ''
+        });
+        
+        alert('Insertion successful!');
+      } catch (error) {
+        alert('Error during insertion: ' + error.message);
+      }
+    }
+  }
 
   return (
     <>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DateCalendar
-          defaultValue={initialValue}
-          loading={isLoading}
-          onMonthChange={handleMonthChange}
-          renderLoading={() => <DayCalendarSkeleton />}
-          slots={{
-            day: ServerDay,
-          }}
-          slotProps={{
-            day: {
-              highlightedDays,
-            },
-          }}
-        />
-      </LocalizationProvider>
+
       <div className='plannerForm'>
 
         <h2>Planner</h2>
         <Box
 
           component="form"
-          // '& > :not(style)': means that it applies to all children elements that have no 'style' attribute. so marging 1 x 8px would be applied to all children
           sx={{ '& > :not(style)': { m: 2 } }}
 
 
@@ -303,75 +334,10 @@ const Planner = () => {
           noValidate
         >
 
-          <FormControl sx={{ mb: 2, minWidth: 200 }}>
-            <InputLabel>Category</InputLabel>
-            {/* <Select
-              name="category" value={option.category} label="Category"
-              onChange={handleInputChange}
-            >
-              <MenuItem value=""><em>None</em></MenuItem>
-              <MenuItem value="vegan">Vegan</MenuItem>
-              <MenuItem value="vegetarian">Vegetarian</MenuItem>
-              <MenuItem value="non-vegetarian">Non-Vegetarian</MenuItem>
-            </Select> */}
-
-<select  onChange={handleFruitChange}> 
-      <option value="⬇️ Select a Recipe ⬇️"> -- Select a Recipe -- </option>
-            {/* Mapping through each fruit object in our fruits array
-          and returning an option element with the appropriate attributes / values.
-         */}
-      {recipes && recipes.map((row) => <option key={row.id} id={row.id} value={row.title}>{row.title}</option>)}
-
-      {/* { peopleInfo.map(person=>
-                        <tr key={person.id}>
-                            <td>{ person.name.toUpperCase() }</td>
-                            <td>{ person.country } { person.country === "Ukraine" ? '*' : '' } </td>
-                        </tr> 
-                    )}         */}
-
-    </select>
-          </FormControl>
-
-          
-<FormControl sx={{ mb: 2, minWidth: 200 }}>
-          <InputLabel>Recipe</InputLabel>
-          <Select
-            id="title"
-            value={formFields.title} 
-            name="title" label="Select Recipe"
-            onChange={handleInputChange}
-          >
-            {/* {recipes && recipes.map((row) => <option key={row.id} id={row.id} value={row.title}>{row.title}</option>)} */}
-         
-            { recipes && recipes.map(row=>
-                  <MenuItem key={row.id} value={row.title}>{row.title}</MenuItem>
-
-                  
-                    )}
-
-          </Select>
-        </FormControl>
-
-        <FormControl sx={{ mb: 2, minWidth: 200 }}>
-          <InputLabel>Meal Time</InputLabel>
-          <Select
-            id="mealTime"
-            value={formFields.mealTime} 
-            name="mealTime" label="Meal Time"
-            onChange={handleInputChange}
-          >
-            <MenuItem value=""><em>None</em></MenuItem>
-
-            <MenuItem value="breakfast">Breakfast</MenuItem>
-            <MenuItem value="lunch">Lunch</MenuItem>
-            <MenuItem value="dinner">Dinner</MenuItem>
-          </Select>
-        </FormControl>
-
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+<LocalizationProvider dateAdapter={AdapterDayjs}>
 
             {/* <DatePicker   value={value} label="Date of Birth"  onChange={(newValue) => setValue(newValue)}/> */}
-            <DatePicker value={value} label="Date of Birth" onChange={(newValue) => handleDatepicker(newValue)}
+            <DatePicker value={value} label="Date" onChange={(newValue) => handleDatepicker(newValue)}
               slotProps={{
                 textField: {
                   error: !!errors.dob,
@@ -382,6 +348,49 @@ const Planner = () => {
 
 
           </LocalizationProvider>
+        
+          
+<FormControl sx={{ mb: 2, minWidth: 200 }} error={!!errors.recipe_id}>
+          <InputLabel>Recipe</InputLabel>
+          <Select
+            required
+            id="recipe_id"
+            value={formFields.recipe_id} 
+            name="recipe_id" label="Select Recipe"
+            onChange={handleInputChange}
+            error={!!errors.recipe_id}
+          
+          >
+         
+            { recipes && recipes.map(row=>
+                  <MenuItem key={row.id} value={row.id}>{row.title}</MenuItem>
+
+                  
+                    )}
+
+          </Select>
+          {errors.recipe_id && <FormHelperText>{errors.recipe_id}</FormHelperText>}
+        </FormControl>
+
+        <FormControl sx={{ mb: 2, minWidth: 200 }} error={!!errors.mealTime}>
+          <InputLabel>Meal Time</InputLabel>
+          <Select
+            id="mealTime"
+            value={formFields.mealTime} 
+            name="mealTime" label="Meal Time"
+            onChange={handleInputChange}
+            
+          >
+            <MenuItem value=""><em>None</em></MenuItem>
+
+            <MenuItem value="breakfast">Breakfast</MenuItem>
+            <MenuItem value="lunch">Lunch</MenuItem>
+            <MenuItem value="dinner">Dinner</MenuItem>
+          </Select>
+          {errors.mealTime && <FormHelperText>{errors.mealTime}</FormHelperText>}
+        </FormControl>
+
+          
 
 
           <Button variant="outlined" type='submit'>Add</Button>
