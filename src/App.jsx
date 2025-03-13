@@ -15,6 +15,7 @@ import AuthContext from './core/AuthContext';
 import Profile from './components/Profile'
 import ProtectedRoute from './components/ProtectedRoute'
 import ViewRecipe from './components/ViewRecipe'
+import Container from '@mui/material/Container';
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -23,7 +24,8 @@ function App() {
       <header>
         <Header />
       </header>
-      <main>
+      <main className='main'>
+      <Container maxWidth="xl">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path='signup' element={<SignUp />} />
@@ -42,6 +44,7 @@ function App() {
           <Route path='list' element={<ShoppingList />} />
           <Route path='logout' element={<Logout />} />
         </Routes>
+        </Container>
       </main>
       <footer>
         <Footer />

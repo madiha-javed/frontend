@@ -4,4 +4,9 @@
     align-items: center;
     padding: 10px 20px;
     border: 1px solid #000;
+    width: 100%;
 }
+.header {
+    background:#ff0;
+    /* padding:10px; */
+  }
