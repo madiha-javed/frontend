@@ -24,6 +24,7 @@ import { LinearProgress, Typography } from '@mui/material';
 const url="http://localhost:3000/login";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formFields, setFormFields] = useState({
     email: '',
     password: '',
@@ -32,7 +33,7 @@ const Login = () => {
 const [error, setError] = useState('');
 
  const {login } = useContext(AuthContext);
- const navigate = useNavigate();
+
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -150,7 +151,7 @@ const [error, setError] = useState('');
           console.log(result.data);
         console.log('Login successful!');
         login({ userId: result.data.user_id, name: result.data.first_name + " " + result.data.last_name });
-        navigate('/');
+        navigate('/recipes');
 
 
       }else{

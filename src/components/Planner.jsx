@@ -99,7 +99,7 @@ const Planner = () => {
 
   const columns = [
     //{ field: 'recipe_id', headerName: 'ID', width: 70 },
-    { field: 'date', headerName: 'Date', width: 200, sortable: true, type : 'date', 
+    { field: 'date', headerName: 'Date', width: 280, sortable: true, type : 'date', 
       valueFormatter: (value) => {
         if (value == null) {
           return '';
@@ -107,6 +107,7 @@ const Planner = () => {
         //return `${value.toLocaleString()} %`;
         //return `${value}`;
         return new Date(value).toLocaleDateString();
+         
       },
     //   valueFormatter: (params) => {
     //     if (!params?.value) return '';
@@ -116,10 +117,10 @@ const Planner = () => {
 
     // }
   },
-    { field: 'title', headerName: 'Title', width: 230 },
-    { field: 'meal_time', headerName: 'Meal Time', width: 230, sortable: false, }
+    { field: 'title', headerName: 'Title', width: 280 },
+    { field: 'meal_time', headerName: 'Meal Time', width: 330, sortable: false, }
   ];
-  const paginationModel = { page: 0, pageSize: 10 };
+  const paginationModel = { page: 0, pageSize: 5 };
 
   const [ recipes, setRecipes] = useState(null);
   const fetchRecipes = async () => {
@@ -338,9 +339,13 @@ const Planner = () => {
   return (
     <>
 
-      <div className='plannerForm'>
+<section  className='page' >
 
-        <h2>Planner</h2>
+    
+<h2 className='page__title'>Meal Planner Here!</h2>
+<div className='page__content'>
+<div className=''>
+     
         <Box
 
           component="form"
@@ -368,7 +373,7 @@ const Planner = () => {
           </LocalizationProvider>
         
           
-<FormControl sx={{ mb: 2, minWidth: 200 }} error={!!errors.recipe_id}>
+<FormControl sx={{ mb: 2, minWidth: 250 }} error={!!errors.recipe_id}>
           <InputLabel>Recipe</InputLabel>
           <Select
             required
@@ -388,7 +393,7 @@ const Planner = () => {
           {errors.recipe_id && <FormHelperText>{errors.recipe_id}</FormHelperText>}
         </FormControl>
 
-        <FormControl sx={{ mb: 2, minWidth: 200 }} error={!!errors.mealTime}>
+        <FormControl sx={{ mb: 2, minWidth: 250 }} error={!!errors.mealTime}>
           <InputLabel>Meal Time</InputLabel>
           <Select
             id="mealTime"
@@ -431,6 +436,8 @@ const Planner = () => {
           />
         </Paper>
       </div>
+      </div>
+      </section>
     </>
   );
 }

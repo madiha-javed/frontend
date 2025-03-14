@@ -15,7 +15,10 @@ const min = 0;
 const max = 10;
 const AddRecipe = () => {
   const [action, setAction]= useState('Add');
+  // const {user} = useContext(AuthContext);
   const {user} = useContext(AuthContext);
+  const {login } = useContext(AuthContext);
+  console.log("user ID===Add/Edit=>"+user.userId);
   //const current
   //console.log(JSON.stringify(user.user.userId));
   const [recipeEditId, setRecipeEditId] = useState(null);
@@ -29,16 +32,16 @@ const AddRecipe = () => {
   //     //setRecipeEditId(state.recipe.recipe_id);
   //   }
   // }, []);
-  const [recipe, setRecipe] = useState({
-    title: '', description: '', portionSize: '', preparationTime: '',
-    cookingTime: '', category: '', rating: 0, cookingSteps: '',
-    notes: '', source: '', user : '1'
-  });
   // const [recipe, setRecipe] = useState({
   //   title: '', description: '', portionSize: '', preparationTime: '',
   //   cookingTime: '', category: '', rating: 0, cookingSteps: '',
-  //   notes: '', source: '', user : user.userId
-  // })
+  //   notes: '', source: '', user : '1'
+  // });
+  const [recipe, setRecipe] = useState({
+    title: '', description: '', portionSize: '', preparationTime: '',
+    cookingTime: '', category: '', rating: 0, cookingSteps: '',
+    notes: '', source: '', user : user.userId
+  })
   //console.log(user.userId);
   console.log(recipe);
   const [recipeIngredients, setRecipeIngredients] = useState([
@@ -217,11 +220,15 @@ const AddRecipe = () => {
   };
 
   return (
-    <section>
-      <Typography variant="h4" gutterBottom>{action} Recipe</Typography>
+    <section  className='page' >
+
+    
+      <h2 className='page__title'>{action} Recipe</h2>
+      <div className='page__content'>
+     
       
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      {success && <Alert severity="success" sx={{ mb: 2 }}>Recipe added successfully!</Alert>}
+      {success && <Alert severity="success" sx={{ mb: 2 }}>Recipe {action}ed successfully!</Alert>}
       
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 2 }}>
         <TextField
@@ -237,25 +244,26 @@ const AddRecipe = () => {
         
         <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
           <TextField
+            sx={{ width: '210px' }}
             required label="Portion Size" name="portionSize" type="number"
             value={recipe.portionSize} onChange={handleInputChange}
             inputProps={{ min: 1 }}
           />
           
           <TextField
+          sx={{ width: '210px' }}
             required label="Preparation Time (min)" name="preparationTime" type="number"
             value={recipe.preparationTime} onChange={handleInputChange}
             inputProps={{ min: 0 }}
           />
           
           <TextField
+          sx={{ width: '210px' }}
             required label="Cooking Time (min)" name="cookingTime" type="number"
             value={recipe.cookingTime} onChange={handleInputChange}
             inputProps={{ min: 0 }}
           />
-        </Stack>
-        
-        <FormControl sx={{ mb: 2, minWidth: 200 }}>
+          <FormControl sx={{ mb: 2, minWidth: 210 }}>
           <InputLabel>Category</InputLabel>
           <Select
             name="category" value={recipe.category} label="Category"
@@ -267,6 +275,9 @@ const AddRecipe = () => {
             <MenuItem value="non-vegetarian">Non-Vegetarian</MenuItem>
           </Select>
         </FormControl>
+        </Stack>
+        
+        
         
         <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>
           Ingredients <Typography component="span" color="error">*</Typography>
@@ -354,6 +365,7 @@ const AddRecipe = () => {
           {loading ? 'Saving...' : `${action} Recipe`}
         </Button>
       </Box>
+      </div>
     </section>
   );
 };

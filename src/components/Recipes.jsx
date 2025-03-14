@@ -18,9 +18,10 @@ const url = "http://localhost:3000/recipes/user/";
 const Recipes = () => {
   const {user} = useContext(AuthContext);
   const {login } = useContext(AuthContext);
+  console.log("user ID====>"+user.userId);
 
 const navigate = useNavigate();
-console.log("user ID====>"+user.userId);
+
 
   //const [students, setStudents] =  useState([]);
 
@@ -59,7 +60,7 @@ console.log("user ID====>"+user.userId);
   function handleEdit(recipe) {
     console.log(recipe);
     console.log("*** Handle ***");
-    navigate('/recipe', { state: { edit: true, recipe_id: recipe.recipe_id, recipe_user:user.userId } });
+    navigate('/recipe/edit', { state: { edit: true, recipe_id: recipe.recipe_id, recipe_user:user.userId } });
   }
   const fetchRecipes = async () => {
     try {
@@ -122,40 +123,13 @@ console.log("user ID====>"+user.userId);
   };
 
   return (
-    
-    <section>
-        <h2>Recipes</h2>
-        {/* <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Title </TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.recipe_id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.title}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer> */}
+    <section  className='page' >
 
-<Paper sx={{ height: 400, width: '100%' }}>
+    
+      <h2 className='page__title'>All Recipes</h2>
+      <div className='page__content'>
+   
+<Paper sx={{ height: 425, width: '100%' }}>
       <DataGrid
          //getRowId={(row: any) =>  row.first_name + row.salary}
         getRowId={(row) => row.recipe_id} 
@@ -168,7 +142,7 @@ console.log("user ID====>"+user.userId);
       />
     </Paper>
 
-        
+        </div>
     </section>
   )
 }

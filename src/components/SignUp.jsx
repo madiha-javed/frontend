@@ -23,6 +23,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router';
 
 
 
@@ -32,6 +33,7 @@ import dayjs from 'dayjs';
 const url = "http://localhost:3000/users";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   let date = Date();
   const [value, setValue] = useState(dayjs(date));
   const initialDate = dayjs(date).toISOString().split('T')[0]; // Format today's date as yyyy-mm-dd
@@ -224,6 +226,7 @@ const SignUp = () => {
         });
 
         alert('Signup successful!');
+        navigate('/login')
       } catch (error) {
         alert('Error during signup: ' + error.message);
       }

@@ -66,13 +66,18 @@ const ViewRecipe = () => {
   }
 
   return (
+    <section  className='page' >
+
+    
+    <h2 className='page__title'>{recipe.title}</h2>
+    <div className='page__content'>
     <Box sx={{ maxWidth: 1200, margin: '0 auto', padding: 3 }}>
       <Paper elevation={3} sx={{ padding: 3 }}>
         {/* Title and Rating */}
         <Box sx={{ mb: 3 }}>
-          <Typography variant="h4" gutterBottom>
+          {/* <Typography variant="h4" gutterBottom>
             {recipe.title}
-          </Typography>
+          </Typography> */}
           <Rating value={recipe.ratings || 0} readOnly />
         </Box>
 
@@ -159,6 +164,8 @@ const ViewRecipe = () => {
         )}
       </Paper>
     </Box>
+    </div>
+    </section>
   );
 };
 

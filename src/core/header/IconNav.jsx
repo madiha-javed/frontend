@@ -29,6 +29,7 @@ const IconNav = () => {
       <div>
 
         <Button
+        sx={{minWidth: "auto"}}
           id="demo-positioned-button"
           aria-controls={open ? 'demo-positioned-menu' : undefined}
           aria-haspopup="true"
@@ -58,15 +59,16 @@ const IconNav = () => {
             <MenuItem onClick={handleClose}><a href="/login">Login</a></MenuItem>
           }
 
-          {isLogged &&
-            <>
+          {isLogged && 
+          
+            <div>
               <MenuItem onClick={handleClose} >
               
               <NavLink to="profile">Profile</NavLink>
               </MenuItem>
               <MenuItem onClick={handleClose}><NavLink to="logout">Logout</NavLink></MenuItem>
 
-            </>
+            </div>
           }
 
         </Menu>
