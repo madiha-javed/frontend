@@ -53,7 +53,7 @@ html, body {
   border: 1px solid black;
   width: 90%;
   margin: 0px auto;
-  background-color: #EFEEE8;
+  /* background-color: #EFEEE8; */
 }
 
 .header{
@@ -74,4 +74,20 @@ html, body {
 }
 a{
    color: var(--color-primary);
+}
+
+.page{}
+.page__title{ 
+  /* text-align: center; */
+  color: var(--color-text);
+}
+.page__content{
+  width: 100%;
+}
+.page__content__form{
+
+  width:400px;
+  display: flex;
+  flex-direction: row;
+  /* margin: 0 auto; */
 }

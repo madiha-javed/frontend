@@ -29,13 +29,13 @@ import dayjs from 'dayjs';
 
 
 
-const url="http://localhost:3000/users";
+const url = "http://localhost:3000/users";
 
 const SignUp = () => {
   let date = Date();
   const [value, setValue] = useState(dayjs(date));
   const initialDate = dayjs(date).toISOString().split('T')[0]; // Format today's date as yyyy-mm-dd
-  
+
   const [formFields, setFormFields] = useState({
     firstName: '',
     lastName: '',
@@ -61,16 +61,16 @@ const SignUp = () => {
   const handleDatepicker = (x) => {
     let d = new Date(x);
     const formattedDate = d.toISOString().split('T')[0];
-    
+
     setFormFields(prevFields => ({
-        ...prevFields,
-        dob: formattedDate
+      ...prevFields,
+      dob: formattedDate
     }));
 
     // Validate date immediately
     setErrors(prevErrors => ({
-        ...prevErrors,
-        dob: formattedDate ? '' : 'Date of birth is required'
+      ...prevErrors,
+      dob: formattedDate ? '' : 'Date of birth is required'
     }));
   };
   const handleChange = (event) => {
@@ -78,40 +78,40 @@ const SignUp = () => {
 
     // Update form fields
     setFormFields(prevFields => ({
-        ...prevFields,
-        [name]: value
+      ...prevFields,
+      [name]: value
     }));
 
     // Validate field immediately
     let error = '';
     switch (name) {
-        case 'firstName':
-            if (!value.trim()) error = 'First name is required';
-            else if (value.length < 2) error = 'First name must be at least 2 characters';
-            else if (!/^[A-Za-z\s]+$/.test(value)) error = 'First name should only contain letters';
-            break;
+      case 'firstName':
+        if (!value.trim()) error = 'First name is required';
+        else if (value.length < 2) error = 'First name must be at least 2 characters';
+        else if (!/^[A-Za-z\s]+$/.test(value)) error = 'First name should only contain letters';
+        break;
 
-        case 'lastName':
-            if (!value.trim()) error = 'Last name is required';
-            else if (value.length < 2) error = 'Last name must be at least 2 characters';
-            else if (!/^[A-Za-z\s]+$/.test(value)) error = 'Last name should only contain letters';
-            break;
+      case 'lastName':
+        if (!value.trim()) error = 'Last name is required';
+        else if (value.length < 2) error = 'Last name must be at least 2 characters';
+        else if (!/^[A-Za-z\s]+$/.test(value)) error = 'Last name should only contain letters';
+        break;
 
-        case 'email':
-            if (!value) error = 'Email is required';
-            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = 'Invalid email format';
-            break;
+      case 'email':
+        if (!value) error = 'Email is required';
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = 'Invalid email format';
+        break;
 
-        case 'password':
-            if (!value) error = 'Password is required';
-            else if (value.length < 8) error = 'Password must be at least 8 characters';
-            break;
+      case 'password':
+        if (!value) error = 'Password is required';
+        else if (value.length < 8) error = 'Password must be at least 8 characters';
+        break;
     }
 
     // Update errors state
     setErrors(prevErrors => ({
-        ...prevErrors,
-        [name]: error
+      ...prevErrors,
+      [name]: error
     }));
   };
 
@@ -191,7 +191,7 @@ const SignUp = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     if (validateForm()) {
       try {
         const dataToInsert = {
@@ -222,125 +222,126 @@ const SignUp = () => {
           dob: '',
           password: '',
         });
-        
+
         alert('Signup successful!');
       } catch (error) {
         alert('Error during signup: ' + error.message);
       }
     }
   };
- 
+
 
   return (
-    <section className="signup">
-
-    <div className='SignUpForm'>
-
-      <h2>Sign Up Page</h2>
-      <Box 
-      
-         component="form"
-        // '& > :not(style)': means that it applies to all children elements that have no 'style' attribute. so marging 1 x 8px would be applied to all children
-        sx={{ '& > :not(style)': { my: 1 } }}
-        
-        
-        autoComplete="off"
-        onSubmit={handleSubmit}
-        noValidate
-      >
-
-<TextField
-          fullWidth
-          required
-          id="firstName"
-          name="firstName"
-          // value={formFields.firstName}
-          label="First Name"
-          type='text'
-         onChange={handleChange}
-         value={formFields.firstName}
-         error={!!errors.firstName}
-         helperText={errors.firstName}
-        />
-
-<TextField
-          fullWidth
-          required
-          id="lastName"
-          name="lastName"
-          label="Last Name"
-          type='text'
-          onChange={handleChange}
-          value={formFields.lastName}
-          error={!!errors.lastName}
-          helperText={errors.lastName}
-        />
-
-        <TextField
-          fullWidth
-          required
-          id="email"
-          name="email"
-          label="Email"
-          type='email'
-          onChange={handleChange}
-          value={formFields.email}
-          error={!!errors.email}
-          helperText={errors.email}
-        />
 
 
+    <section className='page' >
+      <h2 className='page__title'>Sign Up Here!</h2>
+      <div className='page__content'>
+        <div className='page__content__form'>
+          <Box
 
-<LocalizationProvider dateAdapter={AdapterDayjs}>
-      
-        {/* <DatePicker   value={value} label="Date of Birth"  onChange={(newValue) => setValue(newValue)}/> */}
-        <DatePicker   value={value} label="Date of Birth"  onChange={(newValue) => handleDatepicker(newValue)}
-        slotProps={{
-          textField: {
-            error: !!errors.dob,
-            helperText: errors.dob
-          }
-        }}
-        />
+            component="form"
+            // '& > :not(style)': means that it applies to all children elements that have no 'style' attribute. so marging 1 x 8px would be applied to all children
+            sx={{ '& > :not(style)': { my: 1 } }}
 
-  
-    </LocalizationProvider>
 
-        <FormControl fullWidth  variant="outlined" error={!!errors.password}>
+            autoComplete="off"
+            onSubmit={handleSubmit}
+            noValidate
+          >
 
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <OutlinedInput
-            id="password"
-            name="password"
-            type={showPassword ? 'text' : 'password'}
-            onChange={handleChange}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label={
-                    showPassword ? 'hide the password' : 'display the password'
+            <TextField
+              fullWidth
+              required
+              id="firstName"
+              name="firstName"
+              // value={formFields.firstName}
+              label="First Name"
+              type='text'
+              onChange={handleChange}
+              value={formFields.firstName}
+              error={!!errors.firstName}
+              helperText={errors.firstName}
+            />
+
+            <TextField
+              fullWidth
+              required
+              id="lastName"
+              name="lastName"
+              label="Last Name"
+              type='text'
+              onChange={handleChange}
+              value={formFields.lastName}
+              error={!!errors.lastName}
+              helperText={errors.lastName}
+            />
+
+            <TextField
+              fullWidth
+              required
+              id="email"
+              name="email"
+              label="Email"
+              type='email'
+              onChange={handleChange}
+              value={formFields.email}
+              error={!!errors.email}
+              helperText={errors.email}
+            />
+
+
+
+            <LocalizationProvider fullWidth dateAdapter={AdapterDayjs}>
+
+              {/* <DatePicker   value={value} label="Date of Birth"  onChange={(newValue) => setValue(newValue)}/> */}
+              <DatePicker  value={value} label="Date of Birth" onChange={(newValue) => handleDatepicker(newValue)}
+                slotProps={{
+                  textField: {
+                    error: !!errors.dob,
+                    helperText: errors.dob
                   }
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  onMouseUp={handleMouseUpPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-          />
-          {errors.password && <FormHelperText>{errors.password}</FormHelperText>}
-        </FormControl>
+                }}
+              />
 
-        <Button variant="outlined" type='submit'>Sign Up</Button>
-        
 
-      </Box>
+            </LocalizationProvider>
 
-      {/* </form> */}
+            <FormControl fullWidth variant="outlined" error={!!errors.password}>
 
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <OutlinedInput
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                onChange={handleChange}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={
+                        showPassword ? 'hide the password' : 'display the password'
+                      }
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      onMouseUp={handleMouseUpPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+              />
+              {errors.password && <FormHelperText>{errors.password}</FormHelperText>}
+            </FormControl>
+
+            <Button variant="outlined" type='submit'>Sign Up</Button>
+
+
+          </Box>
+
+          {/* </form> */}
+        </div>
       </div>
     </section>
   )

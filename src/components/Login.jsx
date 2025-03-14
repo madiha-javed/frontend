@@ -1,7 +1,7 @@
 
 import { useState, useContext} from 'react'; 
 import AuthContext from '../core/AuthContext';
-import { useNavigate } from 'react-router'; 
+import { Link, useNavigate } from 'react-router'; 
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 
@@ -14,7 +14,7 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
-import { Typography } from '@mui/material';
+import { LinearProgress, Typography } from '@mui/material';
 
 
 
@@ -169,9 +169,9 @@ const [error, setError] = useState('');
     <section  className='page' >
 
     
-      <h2 className='page__title'>User Login</h2>
-      <div className='page__block'>
-      <div className='page__block__form'>
+      <h2 className='page__title'>Login Here!</h2>
+      <div className='page__content'>
+      <div className='page__content__form'>
       <Box
         component="form"
         // '& > :not(style)': means that it applies to all children elements that have no 'style' attribute. so marging 1 x 8px would be applied to all children
@@ -197,7 +197,7 @@ const [error, setError] = useState('');
 
 
 
-        <FormControl fullWidth  variant="outlined" error={!!errors.password}>
+        <FormControl fullWidth   variant="outlined" error={!!errors.password}>
 
           <InputLabel htmlFor="password">Password</InputLabel>
           <OutlinedInput
@@ -232,7 +232,10 @@ const [error, setError] = useState('');
 
       </Box>
       </div>
-
+      <Typography variant="button" gutterBottom sx={{ display: 'block' }}>
+       Are you New to this site? consider <a href="/signup">Sign Up</a>.
+      </Typography>
+         
       {/* </form> */}
       </div>
      
