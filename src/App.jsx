@@ -21,11 +21,12 @@ function App() {
   const { user } = useContext(AuthContext);
   return (
     <>
-      <header>
+
+      <header className='header'>
         <Header />
       </header>
       <main className='main'>
-      <Container maxWidth="xl">
+      <section className="main__content">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path='signup' element={<SignUp />} />
@@ -44,9 +45,9 @@ function App() {
           <Route path='list' element={<ShoppingList />} />
           <Route path='logout' element={<Logout />} />
         </Routes>
-        </Container>
+        </section>
       </main>
-      <footer>
+      <footer className='footer'>
         <Footer />
       </footer>
     </>

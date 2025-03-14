@@ -7,14 +7,15 @@ import Container from '@mui/material/Container';
 
 const Header = () => {
   return (
-    <Container maxWidth="xl">
-    <section className="header">
-      
+   
+    <section className="header__content">
+     
         <Logo />
         <TopMenu />
-        {/* <IconNav /> */}
+        <IconNav />
+       
     </section>
-    </Container>
+   
     
   )
 }
