@@ -175,7 +175,7 @@ const [error, setError] = useState('');
       <Box
         component="form"
         // '& > :not(style)': means that it applies to all children elements that have no 'style' attribute. so marging 1 x 8px would be applied to all children
-        sx={{ '& > :not(style)': { my: 1 } }}
+        sx={{ '& > :not(style)': { my: 2 } }}
         onSubmit={handleSubmit}
         noValidate
         // autoComplete="off"
@@ -227,7 +227,7 @@ const [error, setError] = useState('');
           {errors.password && <FormHelperText>{errors.password}</FormHelperText>}
         </FormControl>
 
-        <Button variant="outlined" type='submit'>Login</Button>
+        <Button variant="outlined" type='submit' >Login</Button>
 
 
       </Box>

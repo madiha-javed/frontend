@@ -291,8 +291,8 @@ const SignUp = () => {
             />
 
 
-
-            <LocalizationProvider fullWidth dateAdapter={AdapterDayjs}>
+<FormControl fullWidth >
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
 
               {/* <DatePicker   value={value} label="Date of Birth"  onChange={(newValue) => setValue(newValue)}/> */}
               <DatePicker  value={value} label="Date of Birth" onChange={(newValue) => handleDatepicker(newValue)}
@@ -306,6 +306,7 @@ const SignUp = () => {
 
 
             </LocalizationProvider>
+            </FormControl>
 
             <FormControl fullWidth variant="outlined" error={!!errors.password}>
 
@@ -335,7 +336,7 @@ const SignUp = () => {
               {errors.password && <FormHelperText>{errors.password}</FormHelperText>}
             </FormControl>
 
-            <Button variant="outlined" type='submit'>Sign Up</Button>
+            <Button variant="outlined" type='submit' sx={{ mt: 2 }}>Sign Up</Button>
 
 
           </Box>
