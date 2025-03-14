@@ -29,20 +29,23 @@ const navigate = useNavigate();
 
   const columns = [
     { field: 'recipe_id', headerName: 'ID', width: 70 },
-    { field: 'title', headerName: 'Title', width: 130 },
-    { field: 'description', headerName: 'Description', width: 230, sortable: false, },
-    { field: 'category', headerName: 'Category', width: 130 },
+    { field: 'title', headerName: 'Title', width: 300 },
+    
+    { field: 'category', headerName: 'Category', width: 180 },
+    { field: 'description', headerName: 'Description', width: 300, sortable: false, },
     {
       field: 'ratings',
       headerName: 'Ratings', 
       type: 'number',
-      width: 90,
+      width: 180,
     },
     {
       field: 'action',
       headerName: 'Action', 
       width: 280,
       headerAlign:"center",
+      sortable: false,
+      filterable: false ,
       renderCell: (params) => (
         <>
         
@@ -56,7 +59,7 @@ const navigate = useNavigate();
       ),
     }
   ];
-  const paginationModel = { page: 0, pageSize: 5 };
+  const paginationModel = { page: 0, pageSize: 6 };
   function handleEdit(recipe) {
     console.log(recipe);
     console.log("*** Handle ***");
@@ -75,10 +78,11 @@ const navigate = useNavigate();
         console.log(result);
         setRows(result);
     } catch (error) {
-        // setErrors({
-        //     ...errors,
-        //     error: error.message
-        // });
+        setErrors({
+            ...errors,
+            error: error.message,
+            textAlign: 'center'
+        });
         console.log(error);
     }
 } 
@@ -129,14 +133,15 @@ const navigate = useNavigate();
       <h2 className='page__title'>All Recipes</h2>
       <div className='page__content'>
    
-<Paper sx={{ height: 425, width: '100%' }}>
+<Paper sx={{ height: 421, width: '100%' }}>
       <DataGrid
          //getRowId={(row: any) =>  row.first_name + row.salary}
         getRowId={(row) => row.recipe_id} 
         rows={rows}
         columns={columns}
+        
         initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
+        pageSizeOptions={[6, 12]}
         // checkboxSelection
         sx={{ border: 0 }}
       />

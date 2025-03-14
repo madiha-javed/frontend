@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 
 
 
@@ -28,6 +28,7 @@ import TextField from '@mui/material/TextField';
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {Select, MenuItem} from '@mui/material';
+import AuthContext from '../core/AuthContext';
 
 
 function getRandomNumber(min, max) {
@@ -76,8 +77,12 @@ function ServerDay(props) {
 }
 const url = "http://localhost:3000/planner/user/";
 const Planner = () => {
+  const {user} = useContext(AuthContext);
+  const {login } = useContext(AuthContext);
+  console.log("user ID===Planner=>"+user.userId);
 
   let date = Date();
+
   const [value, setValue] = useState(dayjs(date));
   const initialDate = dayjs(date).toISOString().split('T')[0]; // Format today's date as yyyy-mm-dd
 
@@ -127,7 +132,7 @@ const Planner = () => {
     try {
       //console.log(user);
       //const response = await fetch(url+ user.userId);
-      const response = await fetch("http://localhost:3000/recipes/user/" + '1');
+      const response = await fetch("http://localhost:3000/recipes/user/" + user.userId);
       if (!response.ok) {
         throw Error("There was a problem connecting to the database!");
       }
@@ -149,7 +154,7 @@ const Planner = () => {
     try {
       //console.log(user);
       //const response = await fetch(url+ user.userId);
-      const response = await fetch("http://localhost:3000/planner/user/" + '1');
+      const response = await fetch("http://localhost:3000/planner/user/" + user.userId);
       if (!response.ok) {
         throw Error("There was a problem connecting to the database!");
       }
@@ -342,7 +347,7 @@ const Planner = () => {
 <section  className='page' >
 
     
-<h2 className='page__title'>Meal Planner Here!</h2>
+<h2 className='page__title'>Meal Planner</h2>
 <div className='page__content'>
 <div className=''>
      
@@ -425,7 +430,7 @@ const Planner = () => {
 
       {/* datagrid */}
       <div>
-        <Paper sx={{ height: 400, width: '100%' }}>
+        <Paper sx={{ height:369, width: '100%' }}>
           <DataGrid
             getRowId={(row) => row.id}
             rows={rows}
