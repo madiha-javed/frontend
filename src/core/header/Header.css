@@ -8,8 +8,5 @@
     width: 90%;
     margin: 0 auto;
     height: 100px;
+    color: var(--color-primary);
 }
-.header__content {
-    /* background:#ff0; */
-    /* padding:10px; */
-  }

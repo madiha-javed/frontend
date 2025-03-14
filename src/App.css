@@ -3,7 +3,7 @@
 :root {
   /* --main-color: #cfaab0; */
     /* Primary Colors */
-    --color-background-secondary: #edd0d5;
+    --color-background-secondary: #eed5db;
 
     --color-primary: #1975d2;     /* Button blue */
     --color-background: #FFFFFF;            /* Clean white background */
@@ -41,8 +41,9 @@ html, body {
 .main {
   width: 100%;
   /* min-height: 100vh; */
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 260px);
   background-color: var(--main-color);
+  margin: 50px auto;
 
   /* padding:10px; */
   /* padding-bottom:60px;   Height of the footer */
@@ -51,7 +52,7 @@ html, body {
 .main__content{
   border: 1px solid black;
   width: 90%;
-  margin: 0 auto;
+  margin: 0px auto;
   background-color: #EFEEE8;
 }
 
@@ -74,34 +75,3 @@ html, body {
 a{
    color: var(--color-primary);
 }
-/* h2{
-  text-align: center;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-footer {
-  margin-top: auto;
-} */
-/* *, *::before, *::after {
-  box-sizing: border-box;
-}
-/* 2. Remove default margin */
-/* * {
-  margin: 0;
-} */ 
-
-
-/* body {
-    background-color: #ECEBEB;
-    color: black;
-
-    font-family: Arial;
-    text-align: center;
-  }
-   */

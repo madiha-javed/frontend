@@ -14,6 +14,7 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
+import { Typography } from '@mui/material';
 
 
 
@@ -165,11 +166,12 @@ const [error, setError] = useState('');
   };
 
   return (
-    <section className="login">
+    <section  className='page' >
 
-    <div className='LoginForm'>
-
-      <h2>Login Page</h2>
+    
+      <h2 className='page__title'>User Login</h2>
+      <div className='page__block'>
+      <div className='page__block__form'>
       <Box
         component="form"
         // '& > :not(style)': means that it applies to all children elements that have no 'style' attribute. so marging 1 x 8px would be applied to all children
@@ -229,10 +231,11 @@ const [error, setError] = useState('');
 
 
       </Box>
+      </div>
 
       {/* </form> */}
-
       </div>
+     
     </section>
   )
 }
