@@ -20,6 +20,7 @@ const Recipes = () => {
   const {login } = useContext(AuthContext);
 
 const navigate = useNavigate();
+console.log("user ID====>"+user.userId);
 
   //const [students, setStudents] =  useState([]);
 
@@ -54,17 +55,17 @@ const navigate = useNavigate();
       ),
     }
   ];
-  const paginationModel = { page: 0, pageSize: 10 };
+  const paginationModel = { page: 0, pageSize: 5 };
   function handleEdit(recipe) {
     console.log(recipe);
     console.log("*** Handle ***");
-    navigate('/recipe', { state: { edit: true, recipe_id: recipe.recipe_id, recipe_user:1 } });
+    navigate('/recipe', { state: { edit: true, recipe_id: recipe.recipe_id, recipe_user:user.userId } });
   }
   const fetchRecipes = async () => {
     try {
         //console.log(user);
-        //const response = await fetch(url+ user.userId);
-        const response = await fetch(url+ '1');
+        const response = await fetch(url+ user.userId);
+        // const response = await fetch(url+ '1');
         if (!response.ok) {
             throw Error("There was a problem connecting to the database!");
         }

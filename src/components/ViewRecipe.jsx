@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { 
   Box, 
@@ -16,8 +16,14 @@ import {
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import CategoryIcon from '@mui/icons-material/Category';
+import AuthContext from '../core/AuthContext';
 
 const ViewRecipe = () => {
+
+  const {user} = useContext(AuthContext);
+  const {login } = useContext(AuthContext);
+
+  console.log("user ID====View Recipe ====>"+user.userId);
   const location = useLocation();
   const [recipe, setRecipe] = useState(null);
   const [error, setError] = useState('');
