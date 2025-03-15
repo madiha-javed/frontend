@@ -36,7 +36,7 @@ const IconNav = () => {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
         >
-          <FontAwesomeIcon icon={faUser} />
+          <FontAwesomeIcon icon={faUser} size='2x' />
         </Button>
         <Menu
           id="demo-positioned-menu"
