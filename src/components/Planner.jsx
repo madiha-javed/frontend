@@ -409,9 +409,9 @@ const Planner = () => {
           >
             <MenuItem value=""><em>None</em></MenuItem>
 
-            <MenuItem value="breakfast">Breakfast</MenuItem>
-            <MenuItem value="lunch">Lunch</MenuItem>
-            <MenuItem value="dinner">Dinner</MenuItem>
+            <MenuItem value="Breakfast">Breakfast</MenuItem>
+            <MenuItem value="Lunch">Lunch</MenuItem>
+            <MenuItem value="Dinner">Dinner</MenuItem>
           </Select>
           {errors.mealTime && <FormHelperText>{errors.mealTime}</FormHelperText>}
         </FormControl>

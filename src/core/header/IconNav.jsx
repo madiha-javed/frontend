@@ -22,7 +22,7 @@ const IconNav = () => {
 
 
   return (
-    <section id="topNavIcons">
+    <section  className='header__nav-menu'>
 
 
 
@@ -56,7 +56,10 @@ const IconNav = () => {
           {/* <NavLink to="/login">Login</NavLink> */}
           {!isLogged &&
 
-            <MenuItem onClick={handleClose}><a href="/login">Login</a></MenuItem>
+            // <MenuItem onClick={handleClose}><a href="/login">Login</a></MenuItem>
+            <MenuItem onClick={handleClose}>
+              <NavLink to="login" className={"header__nav-menu__item"}>Login</NavLink>
+              </MenuItem>
           }
 
           {isLogged && 
@@ -64,9 +67,9 @@ const IconNav = () => {
             <div>
               <MenuItem onClick={handleClose} >
               
-              <NavLink to="profile">Profile</NavLink>
+              <NavLink to="profile" className={"header__nav-menu__item"}>Profile</NavLink>
               </MenuItem>
-              <MenuItem onClick={handleClose}><NavLink to="logout">Logout</NavLink></MenuItem>
+              <MenuItem onClick={handleClose} ><NavLink to="logout" className={"header__nav-menu__item"}>Logout</NavLink></MenuItem>
 
             </div>
           }

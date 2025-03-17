@@ -35,14 +35,21 @@ const Profile = () => {
     }, []);
   return (
     <>
+    <section  className='page' >
+
+    
+<h2 className='page__title'>User Profile</h2>
+<div className='page__content'>
         { profile && <section>
-            <p><strong>First Name:</strong> {profile.first_name }</p>
+            <p> <strong>First Name:</strong> {profile.first_name }</p>
 
             <p><strong>Last Name:</strong> {profile.last_name }</p>
             <p><strong>E-mail:</strong> {profile.email}</p>
             <p><strong>Birthdate:</strong> {profile.birth_date}</p>
             
         </section> }
+        </div>
+        </section>
     </>
   )
 }

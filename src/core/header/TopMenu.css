@@ -1,16 +1,16 @@
-.topNavigation ul {
+.header__menu ul {
     margin: 0;
     padding: 0;
     list-style: none;
     display: flex;
 }
-.topNavigation a {
+.header__menu a {
     display: inline-block;
     padding: 10px 20px;
     font-size: 1.2rem;
     /* color: inherit; */
     text-decoration: none;
 }
-.topNavigation a:hover, .topNavigation .active {
+.header__menu a:hover, .header__menu .active {
     text-decoration: underline overline;
 }

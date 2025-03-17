@@ -6,7 +6,7 @@ import AuthContext from '../AuthContext';
 const TopMenu = () => {
   const {isLogged} = useContext(AuthContext);
   return (
-    <nav className="topNavigation">
+    <nav className="header__menu">
         <ul>
           
             
